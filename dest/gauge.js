@@ -56,6 +56,13 @@ var gauge = function (el, data, options) {
     return draw();
 
 };
+
+if (typeof jQuery != undefined) {
+    $.fn.gauge = function(data, options) {
+       return gauge(this, data, options);
+    }
+}
+
 gauge.extend = function (target, source) {
     target = target || {};
     for (var prop in source) {
