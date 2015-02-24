@@ -1,0 +1,10 @@
+.gauge {
+    position: relative;
+    width: 200px;
+    margin: 40px auto;
+}
+
+.gauge-circle {
+    border: 8px solid red;
+}
+
