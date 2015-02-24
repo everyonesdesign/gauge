@@ -59,7 +59,8 @@ var gauge = function (el, data, options) {
 
 if (typeof jQuery != undefined) {
     $.fn.gauge = function(data, options) {
-       return gauge(this, data, options);
+       gauge(this, data, options);
+       return this;
     }
 }
 
