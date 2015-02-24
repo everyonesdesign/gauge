@@ -3,7 +3,7 @@ var gauge = function (el, data, options) {
     if (!data) return;
 
     if (el.length) {
-        for (var i; i < el.length; i++) {
+        for (var i=0; i < el.length; i++) {
             gauge.init(el[i]);
         }
         return;
@@ -14,23 +14,46 @@ var gauge = function (el, data, options) {
     };
     options = gauge.extend(defaults, options);
 
-    //add segments
-    for (var j = 0; j < data.marks.length; j++) {
-        var color = gauge.chooseColor(j / (data.marks.length - 1) * 100, data.colors);
-        var segment = gauge.getSegment(j, data.marks.length, el.clientWidth, options.aperture, color);
-        el.appendChild(segment);
+    function draw() {
+
+        //clear el from children
+        for (var l=0; l<el.children.length; l++) {
+            el.removeChild(el.children[l]);
+        }
+
+        //add segments
+        for (var j = 0; j < data.marks.length; j++) {
+            var color = gauge.chooseColor(j / (data.marks.length - 1) * 100, data.colors);
+            var segment = gauge.getSegment(j, data.marks.length, el.clientWidth, options.aperture, color);
+            el.appendChild(segment);
+        }
+
+        //add labels
+        for (var k = 0; k < data.marks.length; k++) {
+            var label = gauge.getLabel(k, data.marks.length, el.clientWidth, options.aperture, data.marks[k]);
+            el.appendChild(label);
+        }
+
+        //add arrow (and axis)
+        var arrow = gauge.getArrow(data.currentIndex, data.marks.length-1, el.clientWidth, options.aperture);
+        el.appendChild(arrow);
+
+        return {
+            setData: function(newData) {
+                gauge.extend(data, newData);
+                draw();
+            },
+            setCurrentIndex: function(newIndex) {
+                gauge.extend(data, {
+                    currentIndex: newIndex
+                });
+                gauge.setArrowRotation(arrow, newIndex, data.marks.length-1, options.aperture);
+            }
+        }
+
     }
 
-    //add labels
-    for (var k = 0; k < data.marks.length; k++) {
-        var label = gauge.getLabel(k, data.marks.length, el.clientWidth, options.aperture, data.marks[k]);
-        el.appendChild(label);
-    }
-
-    //add arrow (and axis)
-    var arrow = gauge.getArrow(data.currentIndex, data.marks.length, el.clientWidth, options.aperture);
-    el.appendChild(arrow);
-
+    return draw();
 
 };
 gauge.extend = function (target, source) {
@@ -165,17 +188,22 @@ gauge.extend(gauge, {
         arrow.style.borderStyle = "solid";
         arrow.style.borderWidth = "4px " + width/2 + "px 4px 0";
         arrow.style.borderColor = "transparent currentColor transparent transparent";
-
-        var initialRotation = (360 - aperture) / 2;
-        var percentage = index/(total);
-        var sectionRotation = 270 + initialRotation + (aperture * percentage);
-
         for (var i = 0; i < gauge.vendors.length; i++) {
             axis.style[gauge.vendors[i] + "border-radius"] = "50%";
         }
 
+        gauge.setArrowRotation(axis, index, total, aperture);
+
         axis.appendChild(arrow);
         return axis;
 
+    },
+    setArrowRotation: function(axis, index, total, aperture) {
+        var initialRotation = (360 - aperture) / 2;
+        var percentage = index/(total);
+        var sectionRotation = 270 + initialRotation + (aperture * percentage);
+        for (var i = 0; i < gauge.vendors.length; i++) {
+            axis.style[gauge.vendors[i] + "transform"] = "rotate(" + sectionRotation + "deg)";
+        }
     }
 });
