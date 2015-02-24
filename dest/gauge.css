@@ -8,4 +8,17 @@
     border: 6px solid grey;
 }
 
+.gauge-label:before {
+    content: "-";
+    position: absolute;
+    top: 50%;
+    left: -13px;
+    height: 30px;
+    margin-top: -15px;
+    line-height: 30px;
+}
+
+.gauge-labelText {
+    margin-left: -30px;
+}
 

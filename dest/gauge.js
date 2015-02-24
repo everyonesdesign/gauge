@@ -16,12 +16,17 @@ var gauge = function(el, data, options) {
 
     var segmentsLength = data.marks.length-1;
 
-
     //init segments
     for (var j=0; j<segmentsLength; j++) {
         var color = gauge.chooseColor(j/(segmentsLength-1)*100, data.colors);
-        var div = gauge.getSegment(j, segmentsLength, el.clientWidth, options.aperture, color);
-        el.appendChild(div);
+        var segment = gauge.getSegment(j, segmentsLength, el.clientWidth, options.aperture, color);
+        el.appendChild(segment);
+    }
+
+    //init labels
+    for (var k=0; k<data.marks.length; k++) {
+        var label = gauge.getLabel(k, data.marks.length, el.clientWidth, options.aperture, data.marks[k]);
+        el.appendChild(label);
     }
 
 };
@@ -73,9 +78,15 @@ gauge.extend(gauge, {
         circle.style.height = width + "px";
 
         var initialRotation = (360-apertura)/2;
-        var sectionSize = (apertura/total);
-        var outerRotation = -90 + initialRotation + sectionSize*index;
-        var innerRotation = -90 - (90 - sectionSize);
+        var sectionSize = (apertura/(total-1));
+        var outerRotation = 270 + initialRotation + sectionSize*index - sectionSize/2;
+        var innerRotation = 270 - (90 - sectionSize);
+
+        if (!index) {
+            outerRotation = outerRotation+sectionSize/2;
+        } else if (index==total-1) {
+            innerRotation = innerRotation-sectionSize/2;
+        }
 
         for (var i=0; i<gauge.vendors.length; i++) {
             outerDiv.style[gauge.vendors[i]+"transform-origin"] = "50% 100%";
@@ -94,6 +105,38 @@ gauge.extend(gauge, {
         innerDiv.appendChild(circle);
 
         return outerDiv;
+
+    },
+    getLabel: function(index, total, width, apertura, text) {
+
+        var label = document.createElement("div");
+        label.className = "gauge-label";
+        var labelText = document.createElement("div");
+        labelText.className = "gauge-labelText";
+
+        label.style.position = "absolute";
+        label.style.top = width/2+"px";
+        label.style.width = width/2+"px";
+        label.style.height = "30px";
+        label.style.lineHeight = "30px";
+        label.style.marginTop = "-15px";
+        label.style.right = "50%";
+        labelText.style.display = "inline-block";
+
+        var initialRotation = (360-apertura)/2;
+        var sectionRotation = 270 + initialRotation + (apertura*index/(total-1));
+
+        for (var i=0; i<gauge.vendors.length; i++) {
+            label.style[gauge.vendors[i]+"transform-origin"] = "100% 50%";
+            label.style[gauge.vendors[i]+"transform"] = "rotate(" + sectionRotation + "deg)";
+            label.style[gauge.vendors[i]+"transform-origin"] = "100% 50%";
+            labelText.style[gauge.vendors[i]+"transform"] = "rotate(-" + sectionRotation + "deg)";
+        }
+
+        labelText.innerText = text;
+
+        label.appendChild(labelText);
+        return label;
 
     }
 });
