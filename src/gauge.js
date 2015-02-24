@@ -16,6 +16,8 @@ var gauge = function(el, data, options) {
 
     var segmentsLength = data.marks.length-1;
 
+
+    //init segments
     for (var j=0; j<segmentsLength; j++) {
         var color = gauge.chooseColor(j/(segmentsLength-1)*100, data.colors);
         var div = gauge.getSegment(j, segmentsLength, el.clientWidth, options.aperture, color);
@@ -71,7 +73,7 @@ gauge.extend(gauge, {
         circle.style.height = width + "px";
 
         var initialRotation = (360-apertura)/2;
-        var sectionSize = (apertura/total+1);
+        var sectionSize = (apertura/total);
         var outerRotation = -90 + initialRotation + sectionSize*index;
         var innerRotation = -90 - (90 - sectionSize);
 
