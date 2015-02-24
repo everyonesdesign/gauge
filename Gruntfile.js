@@ -4,32 +4,9 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     builtFolder: 'built',
-      jasmine: {
-          coverage: {
-              src: 'src/gauge.js',
-              options: {
-                  outfile: 'test/spec_run.html',
-                  specs: 'test/gauge.js',
-                  keepRunner: true,
-                  vendor: 'test/jquery.min.js',
-                  styles: ['demo/styles.css', 'dest/gauge.css'],
-                  template: require('grunt-template-jasmine-istanbul'),
-                  templateOptions: {
-                      coverage: 'test/coverage/coverage.json',
-                      report: 'test/coverage',
-                      thresholds: {
-                          lines: 75,
-                          statements: 75,
-                          branches: 75,
-                          functions: 90
-                      }
-                  }
-              }
-          }
-      },
       watch: {
           default: {
-              files: ['test/*.js', 'src/*.js', 'src/*.css'],
+              files: ['src/*.js', 'src/*.css'],
               tasks: ['run'],
               options: {
                   spawn: false
@@ -65,8 +42,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task.
-  grunt.registerTask('test', ['jasmine']);
-  grunt.registerTask('run', ['copy', 'uglify', 'test']);
+  grunt.registerTask('run', ['copy', 'uglify']);
   grunt.registerTask('default', ['watch']);
 
 };
