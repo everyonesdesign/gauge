@@ -35,7 +35,7 @@ var gauge = function (el, data, options) {
         }
 
         //add arrow (and axis)
-        var arrow = gauge.getArrow(data.currentIndex, data.marks.length-1, el.clientWidth, options.aperture);
+        var arrow = gauge.getArrow(data.arrowPercentage, el.clientWidth, options.aperture);
         el.appendChild(arrow);
 
         return {
@@ -43,11 +43,11 @@ var gauge = function (el, data, options) {
                 gauge.extend(data, newData);
                 draw();
             },
-            setCurrentIndex: function(newIndex) {
+            setArrowPercentage: function(newIndex) {
                 gauge.extend(data, {
-                    currentIndex: newIndex
+                    arrowPercentage: newIndex
                 });
-                gauge.setArrowRotation(arrow, newIndex, data.marks.length-1, options.aperture);
+                gauge.setArrowRotation(arrow, data.arrowPercentage, options.aperture);
             }
         }
 
@@ -102,12 +102,12 @@ gauge.extend(gauge, {
         outerDiv.style.top = 0;
         outerDiv.style.left = 0;
         outerDiv.style.overflow = "hidden";
-        innerDiv.style.overflow = "hidden";
         outerDiv.style.width = width + "px";
-        innerDiv.style.width = width + "px";
-        circle.style.width = width + "px";
         outerDiv.style.height = width / 2 + "px";
+        innerDiv.style.overflow = "hidden";
+        innerDiv.style.width = width + "px";
         innerDiv.style.height = width / 2 + "px";
+        circle.style.width = width + "px";
         circle.style.height = width + "px";
 
         var initialRotation = (360 - aperture) / 2;
@@ -167,13 +167,13 @@ gauge.extend(gauge, {
             labelText.style[gauge.vendors[i] + "transform"] = "rotate(-" + sectionRotation + "deg)";
         }
 
-        labelText.innerText = text;
+        labelText.innerHTML = text;
 
         label.appendChild(labelText);
         return label;
 
     },
-    getArrow: function (index, total, width, aperture) {
+    getArrow: function (percentage, width, aperture) {
 
         var axis = document.createElement("div");
         axis.className = "gauge-arrow";
@@ -199,15 +199,14 @@ gauge.extend(gauge, {
             axis.style[gauge.vendors[i] + "border-radius"] = "50%";
         }
 
-        gauge.setArrowRotation(axis, index, total, aperture);
+        gauge.setArrowRotation(axis, percentage, aperture);
 
         axis.appendChild(arrow);
         return axis;
 
     },
-    setArrowRotation: function(axis, index, total, aperture) {
+    setArrowRotation: function(axis, percentage, aperture) {
         var initialRotation = (360 - aperture) / 2;
-        var percentage = index/(total);
         var sectionRotation = 270 + initialRotation + (aperture * percentage);
         for (var i = 0; i < gauge.vendors.length; i++) {
             axis.style[gauge.vendors[i] + "transform"] = "rotate(" + sectionRotation + "deg)";
