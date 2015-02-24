@@ -1,0 +1,19 @@
+{
+  "name": "gauge",
+  "version": "0.0.0",
+  "homepage": "https://github.com/everyonesdesign/gauge",
+  "authors": [
+    "Yura Trambitskiy <tr.yura@yahoo.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.3"
+  }
+}
