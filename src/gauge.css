@@ -1,3 +1,13 @@
+body {
+    min-width: 800px;
+    font: 15px/1.3 "Noto Serif", serif;
+}
+
+.container {
+    width: 800px;
+    margin:auto;
+}
+
 .gauge {
     position: relative;
     width: 160px;

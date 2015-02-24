@@ -195,7 +195,11 @@ gauge.extend(gauge, {
         arrow.style.marginRight = "-6px";
         arrow.style.borderWidth = "4px " + width/2 + "px 4px 0";
         arrow.style.borderColor = "transparent currentColor transparent transparent";
-        arrow.style.borderStyle = "dashed solid dashed dashed";
+        if (/Gecko.*Firefox/.test(navigator.userAgent)) {
+            arrow.style.borderStyle = "dashed solid dashed dashed";
+        } else {
+            arrow.style.borderStyle = "solid";
+        }
         for (var i = 0; i < gauge.vendors.length; i++) {
             axis.style[gauge.vendors[i] + "border-radius"] = "50%";
         }

@@ -1,0 +1,44 @@
+<template>
+    <div class="gauge"></div>
+</template>
+
+<script>
+    (function(window, document, undefined) {
+        var thatDoc = document;
+        var thisDoc =  (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
+        var template = thisDoc.querySelector('template').content;
+        var GaugeProto = Object.create(HTMLElement.prototype);
+
+        GaugeProto.createdCallback = function() {
+            var shadowRoot = this.createShadowRoot();
+            var clone = thatDoc.importNode(template, true);
+            if (this.hasAttribute('aperture')) {
+                var who = this.getAttribute('who');
+                this.setWho(who);
+            }
+            else {
+                this.setWho(this.who);
+            }
+            shadowRoot.appendChild(clone);
+            gauge(clone);
+        };
+
+        GaugeProto.attributeChangedCallback = function(attr, oldVal, newVal) {
+            if (attr === 'who') {
+                this.setWho(newVal);
+            }
+        };
+
+        GaugeProto.setWho = function(val) {
+            this.who = val;
+
+            // Sets "who" value into <strong>
+            this.strong.textContent = this.who;
+        };
+
+        window.MyElement = thatDoc.registerElement('kudago-gauge', {
+            prototype: GaugeProto
+        });
+
+    })(window, document);
+</script>

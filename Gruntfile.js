@@ -21,6 +21,10 @@ module.exports = function(grunt) {
           css: {
               src: 'src/gauge.css',
               dest: 'dest/gauge.css'
+          },
+          webcomponent: {
+              src: 'src/gauge.html',
+              dest: 'dest/gauge.html'
           }
       },
       uglify: {
