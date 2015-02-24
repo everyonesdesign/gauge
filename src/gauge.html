@@ -2,38 +2,83 @@
     <div class="gauge"></div>
 </template>
 
+<style id="styles">
+    .gauge {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        margin: 40px auto;
+    }
+    .gauge-circle {
+        border: 6px solid grey;
+    }
+    .gauge-label:before {
+        content: "-";
+        position: absolute;
+        top: 50%;
+        left: -13px;
+        height: 30px;
+        margin-top: -15px;
+        line-height: 30px;
+    }
+    .gauge-labelText {
+        margin-left: -50px;
+        min-width: 50px;
+        text-align: center;
+    }
+    .gauge-arrow {
+        color: #333;
+        -webkit-transition: .5s;
+        -moz-transition: .5s;
+        -ms-transition: .5s;
+        -o-transition: .5s;
+        transition: .5s;
+    }
+</style>
+
 <script>
     (function(window, document, undefined) {
         var thatDoc = document;
         var thisDoc =  (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
         var template = thisDoc.querySelector('template').content;
+        var styles = thisDoc.getElementById('styles');
         var GaugeProto = Object.create(HTMLElement.prototype);
 
         GaugeProto.createdCallback = function() {
             var shadowRoot = this.createShadowRoot();
+            shadowRoot.appendChild(styles);
             var clone = thatDoc.importNode(template, true);
             if (this.hasAttribute('aperture')) {
                 var who = this.getAttribute('who');
-                this.setWho(who);
             }
             else {
-                this.setWho(this.who);
             }
             shadowRoot.appendChild(clone);
-            gauge(clone);
+            var el = shadowRoot.querySelector(".gauge");
+            setTimeout(function() { // timeout for styles parsing
+                gauge(el, {
+                    arrowPercentage: 4/6,
+                    marks: [0,1,2,3,4,5,6],
+                    colors: [
+                        {
+                            "threshold": 80,
+                            "value": "#F8F3BC"
+                        },
+                        {
+                            "threshold": 100,
+                            "value": "#E89483"
+                        }
+                    ]
+                }, {
+
+                });
+            }, 0);
         };
 
         GaugeProto.attributeChangedCallback = function(attr, oldVal, newVal) {
             if (attr === 'who') {
                 this.setWho(newVal);
             }
-        };
-
-        GaugeProto.setWho = function(val) {
-            this.who = val;
-
-            // Sets "who" value into <strong>
-            this.strong.textContent = this.who;
         };
 
         window.MyElement = thatDoc.registerElement('kudago-gauge', {
