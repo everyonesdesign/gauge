@@ -35,7 +35,7 @@ var gauge = function (el, data, options) {
         }
 
         //add arrow (and axis)
-        var arrow = gauge.getArrow(data.arrowPercentage, el.clientWidth, options.aperture);
+        var arrow = gauge.getArrow(data.level, el.clientWidth, options.aperture);
         el.appendChild(arrow);
 
         return {
@@ -43,11 +43,11 @@ var gauge = function (el, data, options) {
                 gauge.extend(data, newData);
                 draw();
             },
-            setArrowPercentage: function(newIndex) {
+            setLevel: function(newIndex) {
                 gauge.extend(data, {
-                    arrowPercentage: newIndex
+                    level: newIndex
                 });
-                gauge.setArrowRotation(arrow, data.arrowPercentage, options.aperture);
+                gauge.setArrowRotation(arrow, data.level, options.aperture);
             }
         }
 

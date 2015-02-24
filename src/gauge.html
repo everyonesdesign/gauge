@@ -9,9 +9,11 @@
         height: 160px;
         margin: 40px auto;
     }
+
     .gauge-circle {
         border: 6px solid grey;
     }
+
     .gauge-label:before {
         content: "-";
         position: absolute;
@@ -21,11 +23,13 @@
         margin-top: -15px;
         line-height: 30px;
     }
+
     .gauge-labelText {
         margin-left: -50px;
         min-width: 50px;
         text-align: center;
     }
+
     .gauge-arrow {
         color: #333;
         -webkit-transition: .5s;
@@ -37,47 +41,55 @@
 </style>
 
 <script>
-    (function(window, document, undefined) {
+
+    (function (window, document, undefined) {
         var thatDoc = document;
-        var thisDoc =  (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
+        var thisDoc = (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
         var template = thisDoc.querySelector('template').content;
         var styles = thisDoc.getElementById('styles');
         var GaugeProto = Object.create(HTMLElement.prototype);
+        var gaugeInstance;
 
-        GaugeProto.createdCallback = function() {
+        GaugeProto.createdCallback = function () {
             var shadowRoot = this.createShadowRoot();
             shadowRoot.appendChild(styles);
             var clone = thatDoc.importNode(template, true);
+
+            var options = {};
+            var data = {};
             if (this.hasAttribute('aperture')) {
-                var who = this.getAttribute('who');
+                options.aperture = this.getAttribute('aperture');
             }
-            else {
+            if (this.hasAttribute('level')) {
+                data.level = this.getAttribute('level');
             }
+            if (this.hasAttribute('marks')) {
+                data.marks = this.getAttribute('marks').split(",");
+            }
+            if (this.hasAttribute('colors')) {
+                var colors = [];
+                var precolors = this.getAttribute('colors').split(",");
+                var item;
+                for (var i = 0; i < precolors.length; i++) {
+                    item = precolors[i].split(":");
+                    colors.push({
+                        threshold: item[0],
+                        value: item[1]
+                    });
+                }
+                data.colors = colors;
+            }
+
             shadowRoot.appendChild(clone);
             var el = shadowRoot.querySelector(".gauge");
-            setTimeout(function() { // timeout for styles parsing
-                gauge(el, {
-                    arrowPercentage: 4/6,
-                    marks: [0,1,2,3,4,5,6],
-                    colors: [
-                        {
-                            "threshold": 80,
-                            "value": "#F8F3BC"
-                        },
-                        {
-                            "threshold": 100,
-                            "value": "#E89483"
-                        }
-                    ]
-                }, {
-
-                });
+            setTimeout(function () { // timeout for styles parsing
+                gaugeInstance = gauge(el, data, options);
             }, 0);
         };
 
-        GaugeProto.attributeChangedCallback = function(attr, oldVal, newVal) {
-            if (attr === 'who') {
-                this.setWho(newVal);
+        GaugeProto.attributeChangedCallback = function (attr, oldVal, newVal) {
+            if (attr === 'level') {
+                gaugeInstance.setLevel(newVal);
             }
         };
 

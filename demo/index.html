@@ -21,13 +21,13 @@
 <div class="container">
     <div class="gauge"></div>
     <br/><br/><br/><br/><br/>
-    <kudago-gauge></kudago-gauge>
+    <kudago-gauge level=".8" marks="1,2,3" aperture="180" colors="80:#f8f3bc,100:#eee"></kudago-gauge>
 </div>
 
 <script>
 
     var myGauge = gauge(document.querySelector(".gauge"), {
-        arrowPercentage: 4/6,
+        level: 4/6,
         marks: [0,1,2,3,4,5,6],
         colors: [
             {
@@ -43,7 +43,8 @@
         aperture: 270
     });
     setTimeout(function() {
-        myGauge.setArrowPercentage(3/6);
+        myGauge.setLevel(3/6);
+        $("kudago-gauge").attr("level", ".2");
     }, 500)
 
 </script>
