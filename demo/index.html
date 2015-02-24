@@ -24,13 +24,22 @@
     gauge(document.querySelector(".gauge"), {
         value: 4,
         marks: [1,2,3,4,5],
-        colors: {
-          "10": "#eee",
-          "70": "#eeffee",
-          "90": "#ff2222"
-        }
+        colors: [
+            {
+                "threshold": 0,
+                "value": "#999"
+            },
+            {
+                "threshold": 60,
+                "value": "#F8F3BC"
+            },
+            {
+                "threshold": 100,
+                "value": "#E89483"
+            }
+        ]
     }, {
-        aperture: 320
+        aperture: 270
     });
 
 </script>

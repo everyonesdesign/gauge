@@ -17,7 +17,8 @@ var gauge = function(el, data, options) {
     var segmentsLength = data.marks.length-1;
 
     for (var j=0; j<segmentsLength; j++) {
-        var div = gauge.getSegment(j, segmentsLength, el.clientWidth, options.aperture);
+        var color = gauge.chooseColor(j/(segmentsLength-1)*100, data.colors);
+        var div = gauge.getSegment(j, segmentsLength, el.clientWidth, options.aperture, color);
         el.appendChild(div);
     }
 
@@ -41,7 +42,16 @@ gauge.vendors = [
     ""
 ];
 gauge.extend(gauge, {
-    getSegment: function(index, total, width, apertura) {
+    chooseColor: function(progress, colors) {
+        var color = "";
+        for (var i=0; i<colors.length; i++) {
+            if (progress >= colors[i].threshold) {
+                color = colors[i].value;
+            }
+        }
+        return color;
+    },
+    getSegment: function(index, total, width, apertura, color) {
 
         var outerDiv = document.createElement("div");
         var innerDiv = document.createElement("div");
@@ -60,10 +70,10 @@ gauge.extend(gauge, {
         innerDiv.style.height = width/2 + "px";
         circle.style.height = width + "px";
 
-        var startConst = (360-apertura)/2;
-        var singleSize = (apertura/total+1);
-        var outerRotation = -90 + startConst + singleSize*index;
-        var innerRotation = -90 - (90 - singleSize);
+        var initialRotation = (360-apertura)/2;
+        var sectionSize = (apertura/total+1);
+        var outerRotation = -90 + initialRotation + sectionSize*index;
+        var innerRotation = -90 - (90 - sectionSize);
 
         for (var i=0; i<gauge.vendors.length; i++) {
             outerDiv.style[gauge.vendors[i]+"transform-origin"] = "50% 100%";
@@ -72,6 +82,10 @@ gauge.extend(gauge, {
             innerDiv.style[gauge.vendors[i]+"transform"] = "rotate(" + innerRotation + "deg)";
             circle.style[gauge.vendors[i]+"border-radius"] = "50%";
             circle.style[gauge.vendors[i]+"box-sizing"] = "border-box";
+        }
+
+        if (color) {
+            circle.style.borderColor = color;
         }
 
         outerDiv.appendChild(innerDiv);
