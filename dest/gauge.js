@@ -192,9 +192,9 @@ gauge.extend(gauge, {
         arrow.style.right = "100%";
         arrow.style.marginTop = "-4px";
         arrow.style.marginRight = "-6px";
-        arrow.style.borderStyle = "solid";
         arrow.style.borderWidth = "4px " + width/2 + "px 4px 0";
         arrow.style.borderColor = "transparent currentColor transparent transparent";
+        arrow.style.borderStyle = "dashed solid dashed dashed";
         for (var i = 0; i < gauge.vendors.length; i++) {
             axis.style[gauge.vendors[i] + "border-radius"] = "50%";
         }
