@@ -1,6 +1,7 @@
 .gauge {
     position: relative;
     width: 160px;
+    height: 160px;
     margin: 40px auto;
 }
 
@@ -19,6 +20,12 @@
 }
 
 .gauge-labelText {
-    margin-left: -30px;
+    margin-left: -50px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.gauge-arrow {
+    color: #333;
 }
 

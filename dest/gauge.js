@@ -1,9 +1,9 @@
-var gauge = function(el, data, options) {
+var gauge = function (el, data, options) {
 
     if (!data) return;
 
     if (el.length) {
-        for (var i; i<el.length; i++) {
+        for (var i; i < el.length; i++) {
             gauge.init(el[i]);
         }
         return;
@@ -14,20 +14,23 @@ var gauge = function(el, data, options) {
     };
     options = gauge.extend(defaults, options);
 
-    var segmentsLength = data.marks.length-1;
-
-    //init segments
-    for (var j=0; j<segmentsLength; j++) {
-        var color = gauge.chooseColor(j/(segmentsLength-1)*100, data.colors);
-        var segment = gauge.getSegment(j, segmentsLength, el.clientWidth, options.aperture, color);
+    //add segments
+    for (var j = 0; j < data.marks.length; j++) {
+        var color = gauge.chooseColor(j / (data.marks.length - 1) * 100, data.colors);
+        var segment = gauge.getSegment(j, data.marks.length, el.clientWidth, options.aperture, color);
         el.appendChild(segment);
     }
 
-    //init labels
-    for (var k=0; k<data.marks.length; k++) {
+    //add labels
+    for (var k = 0; k < data.marks.length; k++) {
         var label = gauge.getLabel(k, data.marks.length, el.clientWidth, options.aperture, data.marks[k]);
         el.appendChild(label);
     }
+
+    //add arrow (and axis)
+    var arrow = gauge.getArrow(data.currentIndex, data.marks.length, el.clientWidth, options.aperture);
+    el.appendChild(arrow);
+
 
 };
 gauge.extend = function (target, source) {
@@ -49,16 +52,16 @@ gauge.vendors = [
     ""
 ];
 gauge.extend(gauge, {
-    chooseColor: function(progress, colors) {
+    chooseColor: function (progress, colors) {
         var color = "";
-        for (var i=0; i<colors.length; i++) {
+        for (var i = 0; i < colors.length; i++) {
             if (progress >= colors[i].threshold) {
                 color = colors[i].value;
             }
         }
         return color;
     },
-    getSegment: function(index, total, width, apertura, color) {
+    getSegment: function (index, total, width, aperture, color) {
 
         var outerDiv = document.createElement("div");
         var innerDiv = document.createElement("div");
@@ -73,28 +76,28 @@ gauge.extend(gauge, {
         outerDiv.style.width = width + "px";
         innerDiv.style.width = width + "px";
         circle.style.width = width + "px";
-        outerDiv.style.height = width/2 + "px";
-        innerDiv.style.height = width/2 + "px";
+        outerDiv.style.height = width / 2 + "px";
+        innerDiv.style.height = width / 2 + "px";
         circle.style.height = width + "px";
 
-        var initialRotation = (360-apertura)/2;
-        var sectionSize = (apertura/(total-1));
-        var outerRotation = 270 + initialRotation + sectionSize*index - sectionSize/2;
+        var initialRotation = (360 - aperture) / 2;
+        var sectionSize = (aperture / (total - 1));
+        var outerRotation = 270 + initialRotation + sectionSize * index - sectionSize / 2;
         var innerRotation = 270 - (90 - sectionSize);
 
         if (!index) {
-            outerRotation = outerRotation+sectionSize/2;
-        } else if (index==total-1) {
-            innerRotation = innerRotation-sectionSize/2;
+            outerRotation = outerRotation + sectionSize / 2;
+        } else if (index == total - 1) {
+            innerRotation = innerRotation - sectionSize / 2;
         }
 
-        for (var i=0; i<gauge.vendors.length; i++) {
-            outerDiv.style[gauge.vendors[i]+"transform-origin"] = "50% 100%";
-            innerDiv.style[gauge.vendors[i]+"transform-origin"] = "50% 100%";
-            outerDiv.style[gauge.vendors[i]+"transform"] = "rotate(" + outerRotation + "deg)";
-            innerDiv.style[gauge.vendors[i]+"transform"] = "rotate(" + innerRotation + "deg)";
-            circle.style[gauge.vendors[i]+"border-radius"] = "50%";
-            circle.style[gauge.vendors[i]+"box-sizing"] = "border-box";
+        for (var i = 0; i < gauge.vendors.length; i++) {
+            outerDiv.style[gauge.vendors[i] + "transform-origin"] = "50% 100%";
+            innerDiv.style[gauge.vendors[i] + "transform-origin"] = "50% 100%";
+            outerDiv.style[gauge.vendors[i] + "transform"] = "rotate(" + outerRotation + "deg)";
+            innerDiv.style[gauge.vendors[i] + "transform"] = "rotate(" + innerRotation + "deg)";
+            circle.style[gauge.vendors[i] + "border-radius"] = "50%";
+            circle.style[gauge.vendors[i] + "box-sizing"] = "border-box";
         }
 
         if (color) {
@@ -107,7 +110,7 @@ gauge.extend(gauge, {
         return outerDiv;
 
     },
-    getLabel: function(index, total, width, apertura, text) {
+    getLabel: function (index, total, width, aperture, text) {
 
         var label = document.createElement("div");
         label.className = "gauge-label";
@@ -115,28 +118,64 @@ gauge.extend(gauge, {
         labelText.className = "gauge-labelText";
 
         label.style.position = "absolute";
-        label.style.top = width/2+"px";
-        label.style.width = width/2+"px";
+        label.style.top = width / 2 + "px";
+        label.style.width = width / 2 + "px";
         label.style.height = "30px";
         label.style.lineHeight = "30px";
         label.style.marginTop = "-15px";
         label.style.right = "50%";
         labelText.style.display = "inline-block";
 
-        var initialRotation = (360-apertura)/2;
-        var sectionRotation = 270 + initialRotation + (apertura*index/(total-1));
+        var initialRotation = (360 - aperture) / 2;
+        var percentage = index/(total-1);
+        var sectionRotation = 270 + initialRotation + (aperture * percentage);
 
-        for (var i=0; i<gauge.vendors.length; i++) {
-            label.style[gauge.vendors[i]+"transform-origin"] = "100% 50%";
-            label.style[gauge.vendors[i]+"transform"] = "rotate(" + sectionRotation + "deg)";
-            label.style[gauge.vendors[i]+"transform-origin"] = "100% 50%";
-            labelText.style[gauge.vendors[i]+"transform"] = "rotate(-" + sectionRotation + "deg)";
+        for (var i = 0; i < gauge.vendors.length; i++) {
+            label.style[gauge.vendors[i] + "transform-origin"] = "100% 50%";
+            label.style[gauge.vendors[i] + "transform"] = "rotate(" + sectionRotation + "deg)";
+            label.style[gauge.vendors[i] + "transform-origin"] = "100% 50%";
+            labelText.style[gauge.vendors[i] + "transform"] = "rotate(-" + sectionRotation + "deg)";
         }
 
         labelText.innerText = text;
 
         label.appendChild(labelText);
         return label;
+
+    },
+    getArrow: function (index, total, width, aperture) {
+
+        var axis = document.createElement("div");
+        axis.className = "gauge-arrow";
+        var arrow = document.createElement("div");
+
+        axis.style.position = "absolute";
+        axis.style.top = "50%";
+        axis.style.left = "50%";
+        axis.style.marginLeft = "-6px";
+        axis.style.marginTop = "-6px";
+        axis.style.width = "12px";
+        axis.style.height = "12px";
+        axis.style.background = "currentColor";
+        arrow.style.position = "absolute";
+        arrow.style.top = "50%";
+        arrow.style.right = "100%";
+        arrow.style.marginTop = "-4px";
+        arrow.style.marginRight = "-6px";
+        arrow.style.borderStyle = "solid";
+        arrow.style.borderWidth = "4px " + width/2 + "px 4px 0";
+        arrow.style.borderColor = "transparent currentColor transparent transparent";
+
+        var initialRotation = (360 - aperture) / 2;
+        var percentage = index/(total);
+        var sectionRotation = 270 + initialRotation + (aperture * percentage);
+
+        for (var i = 0; i < gauge.vendors.length; i++) {
+            axis.style[gauge.vendors[i] + "border-radius"] = "50%";
+        }
+
+        axis.appendChild(arrow);
+        return axis;
 
     }
 });
