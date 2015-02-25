@@ -1,5 +1,5 @@
 {
-  "name": "gauge",
+  "name": "gauge-js",
   "version": "1.0.0",
   "description": "gauge display plugin (kudago.com)",
   "main": "index.js",
