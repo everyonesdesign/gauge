@@ -9,6 +9,14 @@ body {
     margin:auto;
 }
 
+a {
+    color: #F43741;
+    text-decoration: underline;
+}
+a:hover {
+    text-decoration: none;
+}
+
 h1, h2 {
     color: #777;
     text-align: center;
