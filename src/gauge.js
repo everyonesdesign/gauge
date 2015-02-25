@@ -17,8 +17,9 @@ var gauge = function (el, data, options) {
     function draw() {
 
         //clear el from children
-        for (var l=0; l<el.children.length; l++) {
-            el.removeChild(el.children[l]);
+        var childrenLength = el.children.length;
+        for (var l=0; l<childrenLength; l++) {
+            el.removeChild(el.children[0]);
         }
 
         //add segments

@@ -48,19 +48,16 @@
         var template = thisDoc.querySelector('template').content;
         var styles = thisDoc.getElementById('styles');
         var GaugeProto = Object.create(HTMLElement.prototype);
+        var gaugeInstance;
+        var options = {};
+        var data = {};
 
-        GaugeProto.createdCallback = function () {
-            var shadowRoot = this.createShadowRoot();
-            shadowRoot.appendChild(styles);
-            var clone = thatDoc.importNode(template, true);
-
-            var options = {};
-            var data = {};
+        function setGaugeDataAndOptions() {
             if (this.hasAttribute('aperture')) {
                 options.aperture = this.getAttribute('aperture');
             }
-            if (this.hasAttribute('arrowPercentage')) {
-                data.arrowPercentage = this.getAttribute('arrowPercentage');
+            if (this.hasAttribute('level')) {
+                data.level = this.getAttribute('level');
             }
             if (this.hasAttribute('marks')) {
                 data.marks = this.getAttribute('marks').split(",");
@@ -78,17 +75,28 @@
                 }
                 data.colors = colors;
             }
+        }
+
+        GaugeProto.createdCallback = function () {
+            var shadowRoot = this.createShadowRoot();
+            shadowRoot.appendChild(styles);
+            var clone = thatDoc.importNode(template, true);
+
+            setGaugeDataAndOptions.call(this);
 
             shadowRoot.appendChild(clone);
             var el = shadowRoot.querySelector(".gauge");
             setTimeout(function () { // timeout for styles parsing
-                gauge(el, data, options);
+                gaugeInstance = gauge(el, data, options);
             }, 0);
         };
 
         GaugeProto.attributeChangedCallback = function (attr, oldVal, newVal) {
-            if (attr === 'who') {
-                this.setWho(newVal);
+            if (attr == 'level') {
+                gaugeInstance.setLevel(newVal);
+            } else {
+                setGaugeDataAndOptions.call(this);
+                gaugeInstance.setData(data);
             }
         };
 

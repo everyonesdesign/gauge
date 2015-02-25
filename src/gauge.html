@@ -49,14 +49,10 @@
         var styles = thisDoc.getElementById('styles');
         var GaugeProto = Object.create(HTMLElement.prototype);
         var gaugeInstance;
+        var options = {};
+        var data = {};
 
-        GaugeProto.createdCallback = function () {
-            var shadowRoot = this.createShadowRoot();
-            shadowRoot.appendChild(styles);
-            var clone = thatDoc.importNode(template, true);
-
-            var options = {};
-            var data = {};
+        function setGaugeDataAndOptions() {
             if (this.hasAttribute('aperture')) {
                 options.aperture = this.getAttribute('aperture');
             }
@@ -79,6 +75,14 @@
                 }
                 data.colors = colors;
             }
+        }
+
+        GaugeProto.createdCallback = function () {
+            var shadowRoot = this.createShadowRoot();
+            shadowRoot.appendChild(styles);
+            var clone = thatDoc.importNode(template, true);
+
+            setGaugeDataAndOptions.call(this);
 
             shadowRoot.appendChild(clone);
             var el = shadowRoot.querySelector(".gauge");
@@ -88,8 +92,11 @@
         };
 
         GaugeProto.attributeChangedCallback = function (attr, oldVal, newVal) {
-            if (attr === 'level') {
+            if (attr == 'level') {
                 gaugeInstance.setLevel(newVal);
+            } else {
+                setGaugeDataAndOptions.call(this);
+                gaugeInstance.setData(data);
             }
         };
 

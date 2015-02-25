@@ -20,7 +20,7 @@
 
 <div class="container">
     <div class="gauge"></div>
-    <br/><br/><br/><br/><br/>
+    <br/><br/>
     <kudago-gauge level=".8" marks="1,2,3" aperture="180" colors="80:#f8f3bc,100:#eee"></kudago-gauge>
 </div>
 
@@ -44,7 +44,8 @@
     });
     setTimeout(function() {
         myGauge.setLevel(3/6);
-        $("kudago-gauge").attr("level", ".2");
+        $("kudago-gauge").attr("level", ".6");
+        $("kudago-gauge").attr("marks", "1,2,3,4,5,6,7");
     }, 500)
 
 </script>
