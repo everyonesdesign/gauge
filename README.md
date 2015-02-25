@@ -1,1 +1,1 @@
-Gauge plugin readme
+Javascript plugin for gauge demonstration

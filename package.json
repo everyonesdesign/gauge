@@ -1,7 +1,7 @@
 {
   "name": "gauge-js",
   "version": "1.0.0",
-  "description": "gauge display plugin (kudago.com)",
+  "description": "Javascript plugin for gauge demonstration",
   "main": "index.js",
   "scripts": {
     "test": ""
