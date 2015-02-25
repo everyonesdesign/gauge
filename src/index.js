@@ -1,2 +1,0 @@
-//%gaugeMin%//
-module.exports = gauge;
