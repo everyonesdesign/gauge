@@ -82,6 +82,9 @@
             shadowRoot.appendChild(styles);
             var clone = thatDoc.importNode(template, true);
 
+            //gauge minified code itself
+            //%gaugeMin%//
+
             setGaugeDataAndOptions.call(this);
 
             shadowRoot.appendChild(clone);
