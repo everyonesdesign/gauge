@@ -19,14 +19,60 @@
 <body>
 
 <div class="container">
-    <div class="gauge"></div>
-    <br/><br/>
-    <gauge-js level="90" marks="1,2,3" aperture="180" colors="80:#f8f3bc,100:#eee"></gauge-js>
+    <h1>Gauge-js</h1>
+    <p class="intro">Javascript-плагин для отображения круглой шкалы</p>
+    <div class="item">
+        <div class="gauge" id="gauge1"></div>
+    </div>
+    <h2>4 вида инициализации</h2>
+    <p>
+        1) <strong>Javascript.</strong> Подключив <code>gauge.min.js</code> вызвать функцию <code>gauge(el, data, options)</code>:
+    </p>
+<pre>var myGauge = gauge(document.querySelector(".gauge"), {
+    level: 67, <span class="comment">//уровень, на который указывает стрелка, в "%"</span>
+    marks: [0,1,2,3,4,5,6], <span class="comment">// список меток</span>
+    colors: [ <span class="comment">// список цветов, с предельными значениями в процентах</span>
+        {
+            "threshold": 80,
+            "value": "#F8F3BC"
+        },
+        {
+            "threshold": 100,
+            "value": "#E89483"
+        }
+    ]
+}, {
+    aperture: 270 <span class="comment">// открытость шкалы, в градусах</span>
+});</pre>
+    <p>
+        2) <strong>jQuery.</strong> При наличии jQuery на странице плагин можно подключить так: $(el).gauge(data, options).
+    </p>
+    <p>
+        3) <strong>WebComponent.</strong> Подключение кастомным html-тэгом.
+        Подключаем <code>webcomponents.js</code> (<a href="https://github.com/webcomponents/webcomponentsjs">ссылка</a>),
+        добавляем в шапку шаблон <code>&lt;link rel='import' href='gauge.html'&gt;</code>, добавляем тэг вида<br>
+        <code>&lt;gauge-js level=&quot;90&quot; marks=&quot;1,2,3&quot; aperture=&quot;240&quot; colors=&quot;80:#f8f3bc,100:#eee&quot;&gt;&lt;/gauge-js&gt;</code>.<br>
+        При изменении атрибутов элемент будет подхватывать эти изменения. Живой пример (с обработчиком на hover):
+    </p>
+    <div class="item">
+        <gauge-js level="90" marks="1,2,3" aperture="240" colors="80:#f8f3bc,100:#eee"></gauge-js>
+    </div>
+    <p>
+        4) <strong>NodeJS.</strong> <code>npm install gauge-js</code>
+    </p>
+<pre>var gauge = require("gauge-js");
+gauge(el, data, options);
+</pre>
+    <h2>Настройка CSS</h2>
+    <p>С помощью CSS настраивается толщина границ секторов, цвета, размеры шкалы и формат подписей.</p>
+    <div class="item">
+        <div class="gauge" id="gauge2"></div>
+    </div>
 </div>
 
 <script>
 
-    var myGauge = gauge(document.querySelector(".gauge"), {
+    var myGauge = gauge(document.querySelector("#gauge1"), {
         level: 67,
         marks: [0,1,2,3,4,5,6],
         colors: [
@@ -43,10 +89,52 @@
         aperture: 270
     });
 
-    setTimeout(function() {
-        myGauge.setLevel(50);
-        $("gauge-js").attr("level", "40");
-    }, 500);
+    $("gauge-js").hover(function() {
+        $(this).attr("level", 100);
+    }, function() {
+        $(this).attr("level", 0);
+    });
+
+    setInterval(function() {
+        myGauge.setLevel(Math.random()*100);
+    }, 1500);
+
+    $("#gauge2").gauge({
+        level: 80,
+        marks: [0,1,2,3,4,5,6,7,8,9,10],
+        colors: [
+            {
+                "threshold": 40,
+                "value": "#D38B84"
+            },
+            {
+                "threshold": 50,
+                "value": "#E48E44"
+            },
+            {
+                "threshold": 60,
+                "value": "#D0C52C"
+            },
+            {
+                "threshold": 70,
+                "value": "#55DD5B"
+            },
+            {
+                "threshold": 80,
+                "value": "#53DBDA"
+            },
+            {
+                "threshold": 90,
+                "value": "#4159DB"
+            },
+            {
+                "threshold": 100,
+                "value": "#A957D0"
+            }
+        ]
+    }, {
+        aperture: 180
+    });
 
 </script>
 

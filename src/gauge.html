@@ -3,18 +3,29 @@
 </template>
 
 <style id="styles">
+
+    :host {
+        display: inline-block;;
+    }
+
     .gauge {
         position: relative;
         width: 160px;
         height: 160px;
         margin: 40px auto;
+        text-align: left;
+        /*webkit rendering fix*/
+        -webkit-transform: translateZ(1px);
+        transform: translateZ(1px);
     }
 
     .gauge-circle {
-        border: 6px solid grey;
+        /*border styles*/
+        border: 4px solid grey;
     }
 
     .gauge-label:before {
+        /*marker dashes*/
         content: "-";
         position: absolute;
         top: 50%;
@@ -25,14 +36,16 @@
     }
 
     .gauge-labelText {
+        /*labels text styles*/
         margin-left: -50px;
         min-width: 50px;
         text-align: center;
     }
 
     .gauge-arrow {
-        color: #333;
-        -webkit-transition: .5s;
+        /*arrow styles*/
+        color: #333; /*arrow color*/
+        -webkit-transition: .5s; /*transition*/
         -moz-transition: .5s;
         -ms-transition: .5s;
         -o-transition: .5s;

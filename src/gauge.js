@@ -4,7 +4,7 @@ var gauge = function (el, data, options) {
 
     if (el.length) {
         for (var i=0; i < el.length; i++) {
-            gauge.init(el[i]);
+            gauge(el[i]);
         }
         return;
     }
@@ -60,7 +60,7 @@ var gauge = function (el, data, options) {
 
 if (typeof jQuery != undefined) {
     $.fn.gauge = function(data, options) {
-       gauge(this, data, options);
+       gauge(this[0], data, options);
        return this;
     }
 }
@@ -189,6 +189,8 @@ gauge.extend(gauge, {
         axis.style.width = "12px";
         axis.style.height = "12px";
         axis.style.background = "currentColor";
+        axis.style.textAlign = "left";
+        arrow.style.textAlign = "center";
         arrow.style.position = "absolute";
         arrow.style.top = "50%";
         arrow.style.right = "100%";

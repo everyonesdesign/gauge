@@ -1,0 +1,63 @@
+body {
+    min-width: 800px;
+    font: 15px/1.6 "Noto Serif", serif;
+}
+
+.container {
+    padding: 40px 20px;
+    width: 760px;
+    margin:auto;
+}
+
+h1, h2 {
+    color: #777;
+    text-align: center;
+}
+
+.intro {
+    font-size: 17px;
+    text-align: center;
+}
+
+.item {
+    text-align: center;
+}
+
+pre {
+    text-align: left;
+    padding-left: 50px;
+    margin-bottom: 30px;
+}
+.comment {
+    color: #F43741;
+}
+
+code {
+    display: inline-block;
+    font-size: 14px;
+    background: #eee;
+    padding: 1px 3px;
+    vertical-align: middle;
+}
+
+#gauge2 {
+    width: 240px;
+    height: 240px;
+}
+
+#gauge2 .gauge-circle {
+    width: 240px;
+    height: 240px;
+    border-width: 8px;
+}
+
+#gauge2 .gauge-label:before {
+    left: 9px;
+    color: #999;
+    margin-top: -17px;
+}
+#gauge2 .gauge-labelText {
+    font-size: 17px;
+    margin-left: -2px;
+}
+
