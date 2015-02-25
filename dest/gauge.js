@@ -58,8 +58,8 @@ var gauge = function (el, data, options) {
 
 };
 
-if (typeof jQuery != undefined) {
-    $.fn.gauge = function(data, options) {
+if (typeof (jQuery) !== "undefined") {
+    jQuery.fn.gauge = function(data, options) {
        gauge(this[0], data, options);
        return this;
     }
