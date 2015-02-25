@@ -62,7 +62,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-replace');
 
   // Default task.
-  grunt.registerTask('run', ['copy', 'replace', 'uglify']);
+  grunt.registerTask('run', ['copy', 'uglify', 'replace']);
   grunt.registerTask('default', ['watch']);
 
 };

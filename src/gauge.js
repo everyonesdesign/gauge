@@ -212,8 +212,9 @@ gauge.extend(gauge, {
 
     },
     setArrowRotation: function(axis, percentage, aperture) {
+        var actualPercentage = percentage/100;
         var initialRotation = (360 - aperture) / 2;
-        var sectionRotation = 270 + initialRotation + (aperture * percentage);
+        var sectionRotation = 270 + initialRotation + (aperture * actualPercentage);
         for (var i = 0; i < gauge.vendors.length; i++) {
             axis.style[gauge.vendors[i] + "transform"] = "rotate(" + sectionRotation + "deg)";
         }
