@@ -48,7 +48,8 @@ module.exports = function(grunt) {
                   ]
               },
               files: [
-                  {src: ['src/gauge.html'], dest: 'dest/gauge.html'}
+                  {src: ['src/gauge.html'], dest: 'dest/gauge.html'},
+                  {src: ['src/index.js'], dest: 'index.js'}
               ]
           }
       }

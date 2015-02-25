@@ -16,7 +16,7 @@ body {
 }
 
 .gauge-circle {
-    border: 6px solid grey;
+    border: 4px solid grey;
 }
 
 .gauge-label:before {

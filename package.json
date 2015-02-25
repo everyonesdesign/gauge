@@ -4,7 +4,7 @@
   "description": "gauge display plugin (kudago.com)",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": ""
   },
   "repository": {
     "type": "git",
